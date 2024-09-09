@@ -10,19 +10,22 @@
 
 // You will need to uncomment this when you explore line tracing.
 //
-// `include "vc/trace.v"
+`include "vc/trace.v"
 
 module tut3_verilog_regincr_RegIncr
+#(
+  parameter BITWIDTH = 8 // Default BITWIDTH = 8
+)
 (
-  input  logic       clk,
-  input  logic       reset,
-  input  logic [7:0] in_,
-  output logic [7:0] out
+  input         clk,
+  input         reset,
+  input   [BITWIDTH-1:0] in_,
+  output  [BITWIDTH:0] out
 );
 
   // Sequential logic
 
-  logic [7:0] reg_out;
+  logic [BITWIDTH-1:0] reg_out;
   always @( posedge clk ) begin
     if ( reset )
       reg_out <= 0;
@@ -35,19 +38,25 @@ module tut3_verilog_regincr_RegIncr
   // combinational logic here to model the incrementer logic.
   // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+  reg [BITWIDTH-1:0] temp_wire;
+  always @(*) begin
+    temp_wire = reg_out + 1;
+  end
+
+  assign out = temp_wire;
   // You will need to uncomment this when you explore line tracing.
   //
-  // `ifndef SYNTHESIS
-  //
-  // logic [`VC_TRACE_NBITS-1:0] str;
-  // `VC_TRACE_BEGIN
-  // begin
-  //   $sformat( str, "%x (%x) %x", in_, reg_out, out );
-  //   vc_trace.append_str( trace_str, str );
-  // end
-  // `VC_TRACE_END
-  //
-  // `endif /* SYNTHESIS */
+  `ifndef SYNTHESIS
+  
+  logic [`VC_TRACE_NBITS-1:0] str;
+  `VC_TRACE_BEGIN
+  begin
+    $sformat( str, "%x (%x) %x", in_, reg_out, out );
+    vc_trace.append_str( trace_str, str );
+  end
+  `VC_TRACE_END
+  
+  `endif /* SYNTHESIS */
 
 endmodule
 

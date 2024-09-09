@@ -37,4 +37,53 @@ def test_large( cmdline_opts ):
 # another test case to test for overflow. Later you will add a test case
 # for random testing.
 # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+#-------------------------------------------------------------------------
+# test_overflow
+#-------------------------------------------------------------------------
 
+def test_overflow( cmdline_opts ):
+  run_test_vector_sim( RegIncr(), [
+  ('in_ out*'),
+  [ 0x00, '?' ],
+  [ 0xfe, 0x01 ],
+  [ 0xff, 0xff ],
+  [ 0x00, 0x00 ],
+  ], cmdline_opts )
+
+# Self created test
+def test_custom_values(cmdline_opts):
+    run_test_vector_sim( RegIncr(), [
+      ('in_  out*'),
+      [ 0x05, '?'  ], 
+      [ 0x0A, 0x06 ],  
+      [ 0x0F, 0x0B ],  
+      [ 0x00, 0x10 ],  
+      [ 0x01, 0x01 ],  
+    ], cmdline_opts )
+
+
+# Random
+import random
+
+def test_random( cmdline_opts ):
+
+  test_vector_table = [( 'in_', 'out*' )]
+  last_result = '?'
+  for i in range(20):
+    rand_value = Bits8( random.randint(0,0xff) )
+    test_vector_table.append( [ rand_value, last_result ] )
+    last_result = Bits8( rand_value + 1, trunc_int=True )
+
+  run_test_vector_sim( RegIncr(), test_vector_table, cmdline_opts )
+
+# Random < 16
+def test_random_less_than_16( cmdline_opts ):
+
+  test_vector_table = [( 'in_', 'out*' )]
+  last_result = '?'
+  for i in range(20):
+    rand_value = Bits8( random.randint(0,0x10) )
+    test_vector_table.append( [ rand_value, last_result ] )
+    last_result = Bits8( rand_value + 1, trunc_int=True )
+
+  run_test_vector_sim( RegIncr(), test_vector_table, cmdline_opts )
