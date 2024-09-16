@@ -14,7 +14,7 @@ from ..RegIncr_param import RegIncr_param
 
 # To ensure reproducible testing
 
-seed(0xdeadbeef)
+seed(0xdeadbeee)
 
 #-------------------------------------------------------------------------
 # mk_test_vector_table
@@ -80,10 +80,11 @@ def test( test_params, cmdline_opts ):
 # Parameterized Testing of With nstages = [ 1, 2, 3, 4, 5, 6 ] and bitwidths = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
 #-------------------------------------------------------------------------
 
-@pytest.mark.parametrize( "n", range(1, 10))
-@pytest.mark.parametrize( "m", range(1, 9))
-def test_random_nstages_and_bitwidths( n, m, cmdline_opts ):
+@pytest.mark.parametrize( "n", range(1, 15))
+@pytest.mark.parametrize( "m", range(1, 15))
+def test_random_bitwidths_and_nstages( n, m, cmdline_opts ):
+    bitwidth_range = range(0, 2**m)
     run_test_vector_sim( RegIncr_param( p_nstages=n, p_bitwidths=m ),
-        mk_test_vector_table( n, sample(range(0xff), 20), m ), cmdline_opts )
+        mk_test_vector_table( n, sample(bitwidth_range, 100), m ), cmdline_opts )
     
 # Have problme starting at 9/3

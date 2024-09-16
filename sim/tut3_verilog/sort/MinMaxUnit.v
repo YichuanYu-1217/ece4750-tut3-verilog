@@ -22,6 +22,17 @@ module tut3_verilog_sort_MinMaxUnit
   // logic here to implement the min/max unit. You should also write a
   // unit test from scratch named MinMaxUnit_test.py.
   // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+always_comb begin
+  if(in0 < in1) begin
+    out_min = in0;
+    out_max = in1;
+  end
+  else begin
+    out_min = in1;
+    out_max = in0;
+  end
+end
+
 
 endmodule
 

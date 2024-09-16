@@ -212,5 +212,22 @@ module vc_RightLogicalShifter
 
 endmodule
 
+
+
+module vc_OutputIfZero 
+#(
+    parameter p_nbits = 16  
+)(
+    input  wire [p_nbits-1:0] in1,  
+    input  wire [p_nbits-1:0] in2,  
+    output wire [p_nbits-1:0] out   
+);
+
+    assign out = (in1 == {p_nbits{1'b0}}) ? in2 :  
+                 (in2 == {p_nbits{1'b0}}) ? in1 :  
+                 {p_nbits{1'b0}};                 
+
+endmodule
+
 `endif /* VC_ARITHMETIC_V */
 

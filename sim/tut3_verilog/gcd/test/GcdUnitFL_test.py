@@ -79,17 +79,37 @@ random_msgs = []
 for a, b, result in random_cases:
   random_msgs.extend( [ concat(Bits16(a),Bits16(b)), Bits16(result) ] )
 
+
+#-------------------------------------------------------------------------
+# CoPrime
+#-------------------------------------------------------------------------
+# Relatively Prime (Coprime) Test Cases
+coprime_cases = [
+    (35, 64),  # GCD(35, 64) = 1
+    (18, 25),  # GCD(18, 25) = 1
+    (17, 31),  # GCD(17, 31) = 1
+    (21, 22),  # GCD(21, 22) = 1
+    (99, 70),  # GCD(99, 70) = 1
+]
+
+coprime_msgs = []
+for a, b in coprime_cases:
+    coprime_msgs.extend([concat(Bits16(a), Bits16(b)), Bits16(1)])  # Expecting GCD of 1
+
+
 #-------------------------------------------------------------------------
 # Test Case Table
 #-------------------------------------------------------------------------
 
 test_case_table = mk_test_case_table([
   (               "msgs        src_delay  sink_delay"),
-  [ "basic_0x0",  basic_msgs,  0,         0,         ],
-  [ "basic_5x0",  basic_msgs,  5,         0,         ],
-  [ "basic_0x5",  basic_msgs,  0,         5,         ],
-  [ "basic_3x9",  basic_msgs,  3,         9,         ],
-  [ "random_3x9", random_msgs, 3,         9,         ],
+  [ "basic_0x0",  basic_msgs,    0,         0,         ],
+  [ "basic_5x0",  basic_msgs,    5,         0,         ],
+  [ "basic_0x5",  basic_msgs,    0,         5,         ],
+  [ "basic_3x9",  basic_msgs,    3,         9,         ],
+  [ "random_3x9", random_msgs,   3,         9,         ],
+  [ "coprime_0x0", coprime_msgs, 0,         0          ],  # New test case without delays
+  [ "coprime_5x5", coprime_msgs, 5,         5          ],  # New test case with delays
 ])
 #-------------------------------------------------------------------------
 # Test cases
@@ -111,4 +131,5 @@ def test_gcd_fl( test_params ):
     interval_delay=test_params.sink_delay )
 
   run_sim( th )
+
 
